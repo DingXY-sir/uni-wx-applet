@@ -2,7 +2,7 @@
 const install = (Vue, vm) => {
 	// 此为自定义配置参数，具体参数见上方说明
 	Vue.prototype.$u.http.setConfig({
-		baseUrl: '', // 请求的本域名
+		baseUrl: 'https://api.shop.eduwork.cn', // 请求的本域名
 		// method: 'POST',
 		// 设置为json，返回后会对数据进行一次JSON.parse()
 		dataType: 'json',
@@ -12,18 +12,19 @@ const install = (Vue, vm) => {
 		originalData: true, // 是否在拦截器中返回服务端的原始数据
 		loadingMask: true, // 展示loading的时候，是否给一个透明的蒙层，防止触摸穿透
 		// 配置请求头信息
-		header: {
-			'content-type': 'application/json;charset=UTF-8'
-		},
+		// header: {
+		// 	'content-type': 'application/json;charset=UTF-8'
+		// },
 	});
 	
 	// 请求拦截，配置Token等参数
 	Vue.prototype.$u.http.interceptor.request = (config) => {
+		console.log(config,vm)
 		// 引用token
 		// 方式一，存放在vuex的token，假设使用了uView封装的vuex方式
 		// 见：https://uviewui.com/components/globalVariable.html
 		// config.header.token = vm.token;
-		config.header.Authorization = "Bearer " + vm.token
+		config.header.Authorization = "Bearer " + vm.vuex_token
 		
 		// 方式二，如果没有使用uView封装的vuex方法，那么需要使用$store.state获取
 		// config.header.token = vm.$store.state.token;
@@ -67,8 +68,9 @@ const install = (Vue, vm) => {
 			return false;
 		} else if(statusCode == 422) {
 			// 表单验证
+			console.log(data)
 			const { errors } = data
-			vm.$u.toast('验证失败，请重新登录');
+			vm.$u.toast('验证失败，请重新输入');
 			
 			return false;
 		} else {

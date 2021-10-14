@@ -9,7 +9,7 @@ App.mpType = 'app'
 import uView from 'uview-ui'
 Vue.use(uView);
 
-
+// 引入vuex
 let vuexStore = require("@/store/$u.mixin.js");
 Vue.mixin(vuexStore);
 
@@ -29,5 +29,8 @@ Vue.use(httpInterceptor, app)
 import httpApi from '@/common/http.api.js'
 Vue.use(httpApi, app)
 
+// 自定义功能组件
+import utils from '@/common/utils.js'
+Vue.use(utils, app)
 
 app.$mount()
